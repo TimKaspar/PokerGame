@@ -16,13 +16,13 @@ generate_group_cards() {
     generate_random_card
     hand_group_cards[i]="${cards[random_number]}"
     color_group_cards[i]="$((random_number / 13))"
-    hight_group_cards[i]="$((random_number % 13))"
+    height_group_cards[i]="$((random_number % 13))"
   done
 }
 
 is_random_number_in_used_card_indexes() {
   for i in "${used_card_indexes[@]}"; do
-    if [ i == random_nummber ]; then
+    if [ "${i}" == "${random_number}" ]; then
       is_number_in_use=true
       return 1
     fi
@@ -40,21 +40,22 @@ generate_random_card() {
 
   while $is_number_in_use; do
     random_number=$(jot -r 1 0 51)
-
     is_random_number_in_used_card_indexes
 
   done
 
+  used_card_indexes+=("${random_number}")
+
 }
-player_1_has_multiple_hights() {
+player_1_has_multiple_heights() {
 
   ##TODO Funktioniert noch nicht
   pair=false
-  for i in "${hights_collection_player_1[@]}"; do
-    same_hight=0
-    for j in "${hights_collection_player_1[@]}"; do
+  for i in "${heights_collection_player_1[@]}"; do
+    same_height=0
+    for j in "${heights_collection_player_1[@]}"; do
       if [ -$i -eq $j ]; then
-          same_hight=$((same_hight + 1))
+        same_height=$((same_height + 1))
       fi
     done
 
@@ -62,8 +63,8 @@ player_1_has_multiple_hights() {
 }
 
 find_strongest_hand() {
-  hights_collection_player_1=("${hight_player_1[@]}" "${hight_group_cards[@]}")
-  player_1_has_multiple_hights
+  heights_collection_player_1=("${height_player_1[@]}" "${height_group_cards[@]}")
+  player_1_has_multiple_heights
 
   return
 }
@@ -74,7 +75,7 @@ generate_player_cards() {
     generate_random_card
     hand_player_1[i]="${cards[random_number]}"
     color_player_1[i]="$((random_number / 13))"
-    hight_player_1[i]="$((random_number % 13))"
+    height_player_1[i]="$((random_number % 13))"
   done
 
   #Generete Player Two
@@ -82,21 +83,21 @@ generate_player_cards() {
     generate_random_card
     hand_player_2[i]="${cards[random_number]}"
     color_player_2[i]="$((random_number / 13))"
-    hight_player_2[i]="$((random_number % 13))"
+    height_player_2[i]="$((random_number % 13))"
   done
   #Generete Player Three
   for i in {0..1}; do
     generate_random_card
     hand_player_3[i]="${cards[random_number]}"
     color_player_3[i]="$((random_number / 13))"
-    hight_player_3[i]="$((random_number % 13))"
+    height_player_3[i]="$((random_number % 13))"
   done
   #Generete Player Four
   for i in {0..1}; do
     generate_random_card
     hand_player_4[i]="${cards[random_number]}"
     color_player_4[i]="$((random_number / 13))"
-    hight_player_4[i]="$((random_number % 13))"
+    height_player_4[i]="$((random_number % 13))"
   done
 }
 
@@ -114,11 +115,11 @@ declare -a color_player_2
 declare -a color_player_3
 declare -a color_player_4
 declare -a color_group_cards
-declare -a hight_player_1
-declare -a hight_player_2
-declare -a hight_player_3
-declare -a hight_player_4
-declare -a hight_group_cards
+declare -a height_player_1
+declare -a height_player_2
+declare -a height_player_3
+declare -a height_player_4
+declare -a height_group_cards
 
 strength_player_1=0
 strength_player_2=0
