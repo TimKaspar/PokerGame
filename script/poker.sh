@@ -47,24 +47,117 @@ generate_random_card() {
   used_card_indexes+=("${random_number}")
 
 }
-player_1_has_multiple_heights() {
-
-  ##TODO Funktioniert noch nicht
+calculate_player_strength() {
+  #Stärke der Hand von Spieler wird ermittelt
+  current_strength=0
   pair=false
-  for i in "${heights_collection_player_1[@]}"; do
-    same_height=0
-    for j in "${heights_collection_player_1[@]}"; do
-      if [ -$i -eq $j ]; then
-        same_height=$((same_height + 1))
+  pair_height=-1
+  two_pair=false
+  triple=false
+  triple_height=-1
+  quad=false
+  flush=false
+
+  for ((i = 0; i < 6; i++)); do
+    founded_height=-1
+    same_height=1
+    for ((j = i + 1; j < 7; j++)); do
+      if [ -$((heights_collection[i])) -eq -$((heights_collection[j])) ]; then
+        same_height="$(($same_height + 1))"
+        founded_height=$((heights_collection[i]))
       fi
     done
-
+    if [ "$same_height" == "2" ]; then
+      if $pair; then
+        two_pair=true
+      else
+        pair=true
+        pair_height=$founded_height
+      fi
+    fi
+    if [ "$same_height" == "3" ]; then
+      triple=true
+      triple_height=$founded_height
+    fi
+    if [ "$same_height" == "4" ]; then
+      quad=true
+    fi
   done
+
+  #Nach Flush suchen
+  for ((i = 0; i < 6; i++)); do
+    same_color=1
+    for ((j = i + 1; j < 7; j++)); do
+      if [ -$((color_collection[i])) -eq -$((color_collection[j])) ]; then
+        same_color="$(($same_color + 1))"
+      fi
+    done
+    if [ $same_color -ge "5" ]; then
+      flush=true
+    fi
+  done
+
+  #Stärke der Hand wird zugestellt
+  #Schauen ob quads vorhanden sind:
+  if $quad; then
+    current_strength=7
+    return
+  fi
+  #Schauen ob Full House vorhanden ist:
+  if $triple && $pair; then
+    if [ $pair_height -ne $triple_height ]; then
+      current_strength=6
+      return
+    fi
+  fi
+  #Schauen ob Flush vorhanden ist:
+  if $flush; then
+    current_strength=5
+    return
+  fi
+  #Schauen ob triple vorhanden sind:
+  if $triple; then
+    current_strength=3
+    return
+  fi
+  #Schauen ob Two Pairs vorhanden sind:
+  if $two_pair; then
+    current_strength=2
+    return
+  fi
+
+  #Schauen ob Pairs vorhanden sind:
+  if $pair; then
+    current_strength=1
+    return
+  fi
 }
 
 find_strongest_hand() {
-  heights_collection_player_1=("${height_player_1[@]}" "${height_group_cards[@]}")
-  player_1_has_multiple_heights
+  heights_collection=("${height_player_1[@]}" "${height_group_cards[@]}")
+  color_collection=("${color_player_1[@]}" "${color_group_cards[@]}")
+  calculate_player_strength
+  strength_player_1=$current_strength
+
+  heights_collection=("${height_player_2[@]}" "${height_group_cards[@]}")
+  color_collection=("${color_player_2[@]}" "${color_group_cards[@]}")
+  calculate_player_strength
+  strength_player_2=$current_strength
+
+  heights_collection=("${height_player_3[@]}" "${height_group_cards[@]}")
+  color_collection=("${color_player_3[@]}" "${color_group_cards[@]}")
+  calculate_player_strength
+  strength_player_3=$current_strength
+
+  heights_collection=("${height_player_4[@]}" "${height_group_cards[@]}")
+  color_collection=("${color_player_4[@]}" "${color_group_cards[@]}")
+  calculate_player_strength
+  strength_player_4=$current_strength
+
+  echo "Player One's Hand is ${strength_player_1}."
+  echo "Player Two's Hand is ${strength_player_2}."
+  echo "Player Three's Hand is ${strength_player_3}."
+  echo "Player Four's Hand is ${strength_player_4}."
 
   return
 }
