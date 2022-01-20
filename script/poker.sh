@@ -12,6 +12,8 @@
 #
 
 clear
+
+#Diese Funktion generiert die 5 Karten, welche jeder Player benutzen darf.
 generate_group_cards() {
   for i in {0..4}; do
     generate_random_card
@@ -21,6 +23,7 @@ generate_group_cards() {
   done
 }
 
+#Diese Funktion überprüft, dass die zufällige Karte noch nicht benutzt wird.
 is_random_number_in_used_card_indexes() {
   for i in "${used_card_indexes[@]}"; do
     if [ "${i}" == "${random_number}" ]; then
@@ -32,6 +35,7 @@ is_random_number_in_used_card_indexes() {
   return 0
 }
 
+#Diese Funktion generiert eine Zufällige Karte.
 generate_random_card() {
 
   random_number=$(jot -r 1 0 51)
@@ -46,10 +50,10 @@ generate_random_card() {
   done
 
   used_card_indexes+=("${random_number}")
-
 }
+
+#Diese Funktionen ermittelt die Stärke einer Player Hand.
 calculate_player_strength() {
-  #Stärke der Hand von Spieler wird ermittelt
   current_strength=0
   pair=false
   pair_height=-1
@@ -134,6 +138,7 @@ calculate_player_strength() {
   fi
 }
 
+#Diese Funktion sucht den Player mit der stärksten Hand.
 find_strongest_hand() {
   heights_collection=("${height_player_1[@]}" "${height_group_cards[@]}")
   color_collection=("${color_player_1[@]}" "${color_group_cards[@]}")
@@ -177,6 +182,7 @@ find_strongest_hand() {
   return
 }
 
+#Diese Funktion generiert die Karten der Player.
 generate_player_cards() {
   strength_player_1=0
   strength_player_2=0
@@ -214,6 +220,7 @@ generate_player_cards() {
   done
 }
 
+#Diese Funktion gibt alle Karten in der Konsole aus.
 print_player_Cards() {
   echo "Cards Player One"
   for i in "${hand_player_1[@]}"; do
@@ -247,6 +254,7 @@ print_player_Cards() {
 
 }
 
+#Diese Funktion setzt rundenbasierte Variablen zurück.
 reset_all_player_lists() {
   used_card_indexes=()
   hand_player_1=()
@@ -266,36 +274,21 @@ reset_all_player_lists() {
   height_group_cards=()
 }
 
+#Hier werden alle möglichen Karten definiert.
 cards=(2h 3h 4h 5h 6h 7h 8h 9h 10h Jh Qh Kh Ah 2s 3s 4s 5s 6s 7s 8s 9s 10s Js Qs Ks As 2d 3d 4d 5d 6d 7d 8d 9d 10d Jd Qd Kd Ad 2c 3c 4c 5c 6c 7c 8c 9c 10c Jc Qc Kc Ac)
 
+#Hier sind die erzielten Punkte.
 points=0
-
-declare -a used_card_indexes
-
-declare -a hand_player_1
-declare -a hand_player_2
-declare -a hand_player_3
-declare -a hand_player_4
-declare -a hand_group_cards
-declare -a color_player_1
-declare -a color_player_2
-declare -a color_player_3
-declare -a color_player_4
-declare -a color_group_cards
-declare -a height_player_1
-declare -a height_player_2
-declare -a height_player_3
-declare -a height_player_4
-declare -a height_group_cards
-
 correct_answers=true
 
+#Hier ist der Programmablauf geschrieben.
 while $correct_answers; do
   reset_all_player_lists
   generate_player_cards
   generate_group_cards
   find_strongest_hand
   print_player_Cards
+  echo "Machen Sie das Terminal genug gross, um alle Infos lesen zu können."
   echo "Für eine Beschreibung des Spieles, lesen Sie bitte die 'readme.md' Datei."
   echo "Geben sie den Gewinner ein. '1', '2', '3', '4' oder 's' bei Unentschieden."
   read -r eingabe
