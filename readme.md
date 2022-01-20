@@ -1,5 +1,5 @@
 <h1>Anleitung</h1>
-<h3>Dies ist die Beschreibung unserer Variante von Poker:</h3
+<h3>Dies ist die Beschreibung unserer Variante von Poker:</h3>
 
 Es werden 4 Spieler generiert. Jeder davon bekommt 2 Karten. Dazu kommen noch 5 Group-Karten, welche jeder Spieler
 benutzen darf.
@@ -8,8 +8,8 @@ Mit den 2 eigenen Karten und den Group-Karten kann nun eine Hand bestehend aus 5
 
 Der Spieler muss sich dann alle 4x2 Hände und die Group-Karten anschauen und daraus den Runden-Gewinner bestimmen. Dazu
 muss einfach nur die Zahl {1..4} des Gewinners gedrückt werden und es kommen die nächsten Karten. Falls der Spieler einen
-falschen Gewinner kührt, ist das Spiel vorbei. Haben mehrere Hände die besten Karten, so kann 's' (für Splitt) gedrückt
-werden.
+falschen Gewinner kürt, ist das Spiel vorbei. Haben mehrere Hände die besten Karten, so kann 's' (für Splitt) gedrückt
+werden. Wurde keine der unten geschriebenen Hände vorhanden ist, so ist dies auch ein Splitt.
 
 Hier habe ich alle Hände von Schwach bis Stark aufgelistet:
 
